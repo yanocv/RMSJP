@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /admin/     # Disallow administrative pages
+Disallow: /private/   # Disallow private or sensitive information
+Disallow: /cgi-bin/   # Disallow CGI scripts
+Disallow: /scripts/   # Disallow scripts directory
+Disallow: /tmp/       # Disallow temporary files
+Disallow: /uploads/   # Disallow uploaded files directory
+
+Allow: /             # Allow all other pages
+
+Sitemap: https://www.rogersmovingservicejapan.com/sitemap.xml  # Sitemap location

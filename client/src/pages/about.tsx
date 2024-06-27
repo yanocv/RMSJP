@@ -9,6 +9,17 @@ const About: NextPage = () => {
 				<title>About Us - Roger&apos;s Moving Service JP</title>
 				<meta name="description" content="Learn more about our moving company" />
 				<link rel="icon" href="/favicon.ico" />
+				<link rel="canonical" href="https://www.rogermovingservice.com/about" />
+
+				{/* Open Graph Tags for Facebook and Instagram */}
+				<meta property="og:title" content="About Us - Roger's Moving Service JP" />
+				<meta
+					property="og:description"
+					content="Learn more about our moving company, providing top-notch moving services in Tokyo for over 10 years."
+				/>
+				<meta property="og:type" content="website" />
+				<meta property="og:url" content="https://www.rogermovingservice.com/about" />
+				<meta property="og:image" content="https://www.rogermovingservice.com/images/about.webp" />
 			</Head>
 
 			{/* About Us Section */}

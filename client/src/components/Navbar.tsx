@@ -18,7 +18,7 @@ const Navbar: React.FC = (): JSX.Element => {
 			<nav className="bg-gray-800 p-4 fixed w-full z-10 top-0 border-b-2 border-gray-600">
 				<div className="container mx-auto flex justify-between items-center">
 					<div className="text-white text-lg flex items-center">
-						<Image src="/images/logo1.jpg" alt="Logo" width={40} height={40} />
+						<Image src="/images/logo.webp" alt="Logo" width={40} height={40} />
 						<Link href="/" className="ml-2 text-white font-bold">
 							{" "}
 							{/* Added font-bold here */}

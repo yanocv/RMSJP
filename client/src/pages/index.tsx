@@ -7,9 +7,24 @@ const Home: NextPage = () => {
 	return (
 		<div className={`mt-2 ${styles.index}`}>
 			<Head>
-				<title>Roger&apos;s Moving Service JP</title>
-				<meta name="description" content="Professional Moving Services" />
+				<title>Roger&apos;s Moving Service JP | Tokyo Moving Experts</title>
+				<meta
+					name="description"
+					content="Professional house and furniture moving services in Tokyo. Contact Roger's Moving Service Japan for a seamless move."
+				/>
+				<meta name="keywords" content="Tokyo moving service, house movers Tokyo, furniture moving Tokyo" />
 				<link rel="icon" href="/favicon.ico" />
+				<link rel="canonical" href="https://www.rogermovingservice.com/" />
+
+				{/* Open Graph Tags for Facebook and Instagram */}
+				<meta property="og:title" content="Roger's Moving Service JP | Tokyo Moving Experts" />
+				<meta
+					property="og:description"
+					content="Professional house and furniture moving services in Tokyo. Contact Roger's Moving Service Japan for a seamless move."
+				/>
+				<meta property="og:type" content="website" />
+				<meta property="og:url" content="https://www.rogermovingservice.com/" />
+				<meta property="og:image" content="https://www.rogermovingservice.com/images/2.webp" />
 			</Head>
 
 			<header className={`text-center text-gray-800 px-4`}>
@@ -39,7 +54,13 @@ const Home: NextPage = () => {
 						</p>
 					</div>
 					<div className="sm:w-1/2">
-						<Image src="/images/2.jpg" alt="Moving Service" width={600} height={400} className="w-full" />
+						<Image
+							src="/images/intro-original.webp"
+							alt="Moving Service"
+							width={600}
+							height={400}
+							className={` ${styles.img}`}
+						/>
 					</div>
 				</div>
 			</div>
@@ -48,7 +69,7 @@ const Home: NextPage = () => {
 				<section className="bg-gray-100 py-16 px-4 sm:px-6 lg:px-8 flex items-center">
 					<div className="max-w-4xl mx-auto text-center flex flex-col sm:flex-row items-center">
 						<div className="sm:w-1/2 mb-8 sm:mb-0 sm:mr-8">
-							<Image src="/images/1.jpg" alt="Moving Truck" width={600} height={400} className="w-full" />
+							<Image src="/images/1.webp" alt="Moving Truck" width={600} height={400} className="w-full" />
 						</div>
 						<div className="sm:w-1/2 text-left">
 							<h2 className="text-3xl font-semibold text-gray-800 mb-4">Moving with Ease</h2>
@@ -75,7 +96,7 @@ const Home: NextPage = () => {
 							</p>
 						</div>
 						<div className="sm:w-1/2 order-1 sm:order-2">
-							<Image src="/images/storage.jpg" alt="Storage" width={600} height={400} className="w-full" />
+							<Image src="/images/storage.webp" alt="Storage" width={600} height={400} className="w-full" />
 						</div>
 					</div>
 				</section>
@@ -83,7 +104,7 @@ const Home: NextPage = () => {
 				<section className="bg-gray-100 py-16 px-4 sm:px-6 lg:px-8 flex items-center">
 					<div className="max-w-4xl mx-auto text-center flex flex-col sm:flex-row items-center">
 						<div className="sm:w-1/2 mb-8 sm:mb-0 sm:mr-8 order-2 sm:order-1">
-							<Image src="/images/disposal.jpg" alt="Disposal" width={600} height={400} className="w-full" />
+							<Image src="/images/disposal.webp" alt="Disposal" width={600} height={400} className="w-full" />
 						</div>
 						<div className="sm:w-1/2 order-1 sm:order-2">
 							<h2 className="text-3xl font-semibold text-gray-800 mb-4">Disposal</h2>

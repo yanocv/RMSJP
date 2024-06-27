@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
+import axios from "axios";
 import { validateEmail, validateTelephone } from "../components/inquiry/helpers";
 import styles from "../styles/inquiry.module.scss";
 import {
@@ -27,7 +28,7 @@ const Inquiry: NextPage = () => {
 		}
 	};
 
-	const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+	const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): Promise<void> => {
 		e.preventDefault();
 		const newErrors: { [key: string]: string } = {};
 		let hasErrors = false;
@@ -48,9 +49,20 @@ const Inquiry: NextPage = () => {
 		if (hasErrors) {
 			setErrors(newErrors);
 		} else {
-			// Handle form submission (e.g., send form data to the server)
-			console.log(formData);
-			console.log("Form submitted successfully!");
+			try {
+				await axios.post(
+					"https://ipkem1wzt3.execute-api.ap-northeast-1.amazonaws.com/default/send-email",
+					JSON.stringify(formData),
+					{
+						headers: {
+							Accept: "application/json",
+							"Content-Type": "application/json"
+						}
+					}
+				);
+			} catch (error) {
+				console.error("Error sending email:", error);
+			}
 		}
 	};
 
@@ -73,6 +85,17 @@ const Inquiry: NextPage = () => {
 				<title>Inquiry - Roger&apos;s Moving Service JP</title>
 				<meta name="description" content="Submit your moving inquiry" />
 				<link rel="icon" href="/favicon.ico" />
+				<link rel="canonical" href="https://www.rogermovingservice.com/inquiry" />
+
+				{/* Open Graph Tags for Facebook and Instagram */}
+				<meta property="og:title" content="Inquiry - Roger's Moving Service JP" />
+				<meta
+					property="og:description"
+					content="Submit your moving inquiry to Roger's Moving Service JP and let us help you with a seamless move in Tokyo."
+				/>
+				<meta property="og:type" content="website" />
+				<meta property="og:url" content="https://www.rogermovingservice.com/inquiry" />
+				<meta property="og:image" content="https://www.rogermovingservice.com/images/inquiry.webp" />
 			</Head>
 
 			{/* Inquiry Form Section */}
