@@ -60,6 +60,7 @@ const Home: NextPage = () => {
 							width={600}
 							height={400}
 							className={` ${styles.img}`}
+							priority
 						/>
 					</div>
 				</div>
@@ -113,14 +114,6 @@ const Home: NextPage = () => {
 								responsibly, giving you peace of mind.
 							</p>
 						</div>
-					</div>
-				</section>
-
-				{/* Testimonials Section */}
-				<section className="bg-white-100 py-16 px-4 sm:px-6 lg:px-8 flex items-center">
-					<div className="max-w-4xl mx-auto text-center">
-						<h2 className="text-3xl font-semibold text-gray-800 mb-4">Testimonials of Satisfied Customers</h2>
-						{/* Add your testimonials here */}
 					</div>
 				</section>
 			</div>

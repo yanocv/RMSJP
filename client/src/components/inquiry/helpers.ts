@@ -1,7 +1,16 @@
-import { INVALID_EMAIL, INVALID_TELEPHONE_CHARACTERS, INVALID_TELEPHONE_NUMBER, REQUIRED } from "./constants";
+import {
+	INVALID_EMAIL,
+	INVALID_JAPAN_POSTAL_CODE,
+	INVALID_TELEPHONE_CHARACTERS,
+	INVALID_TELEPHONE_NUMBER,
+	REQUIRED
+} from "./constants";
 
 export const validateEmail = (fieldValue: string): string | null => {
 	const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+	if (!fieldValue) {
+		return REQUIRED;
+	}
 	if (!emailRegex.test(fieldValue) && fieldValue) {
 		return INVALID_EMAIL;
 	}
@@ -22,12 +31,13 @@ export const validateTelephone = (fieldValue: string): string | null => {
 	return null;
 };
 
-// Validate required fields
-export const validateRequiredFields = (formData: Record<string, string>): string | null => {
-	for (const key in formData) {
-		if (formData[key] === "") {
-			return REQUIRED;
-		}
+export const validateJapanPostalCode = (fieldValue: string): string | null => {
+	const japanPostalCodeRegex = /^\d{3}-?\d{4}$/;
+	if (!fieldValue) {
+		return REQUIRED;
+	}
+	if (!japanPostalCodeRegex.test(fieldValue)) {
+		return INVALID_JAPAN_POSTAL_CODE;
 	}
 	return null;
 };

@@ -13,15 +13,17 @@ const Navbar: React.FC = (): JSX.Element => {
 		setIsOpen(!isOpen);
 	};
 
+	const closeMenu = (): void => {
+		setIsOpen(false);
+	};
+
 	return (
 		<>
 			<nav className="bg-gray-800 p-4 fixed w-full z-10 top-0 border-b-2 border-gray-600">
 				<div className="container mx-auto flex justify-between items-center">
 					<div className="text-white text-lg flex items-center">
-						<Image src="/images/logo.webp" alt="Logo" width={40} height={40} />
+						<Image src="/images/logo.webp" alt="Logo" width={40} height={40} priority />
 						<Link href="/" className="ml-2 text-white font-bold">
-							{" "}
-							{/* Added font-bold here */}
 							Roger&apos;s Moving Service JP
 						</Link>
 					</div>
@@ -32,18 +34,12 @@ const Navbar: React.FC = (): JSX.Element => {
 					</div>
 					<div className="hidden lg:flex items-center space-x-4">
 						<Link href="/" className="text-white text-lg font-bold">
-							{" "}
-							{/* Added font-bold here */}
 							Home
 						</Link>
 						<Link href="/about" className="text-white text-lg font-bold">
-							{" "}
-							{/* Added font-bold here */}
 							About
 						</Link>
 						<Link href="/inquiry" className="text-white text-lg font-bold">
-							{" "}
-							{/* Added font-bold here */}
 							Inquiry
 						</Link>
 						<div className="flex items-center space-x-4">
@@ -75,19 +71,13 @@ const Navbar: React.FC = (): JSX.Element => {
 					<div className="bg-white flex flex-col pointer-events-auto max-w-full max-h-full h-full">
 						<div className="flex justify-center items-center h-full">
 							<div className="flex flex-col items-center justify-center">
-								<Link href="/" className="text-gray-800 my-4 text-lg font-bold">
-									{" "}
-									{/* Added font-bold here */}
+								<Link href="/" className="text-gray-800 my-4 text-lg font-bold" onClick={closeMenu}>
 									Home
 								</Link>
-								<Link href="/about" className="text-gray-800 my-4 text-lg font-bold">
-									{" "}
-									{/* Added font-bold here */}
+								<Link href="/about" className="text-gray-800 my-4 text-lg font-bold" onClick={closeMenu}>
 									About
 								</Link>
-								<Link href="/inquiry" className="text-gray-800 my-4 text-lg font-bold">
-									{" "}
-									{/* Added font-bold here */}
+								<Link href="/inquiry" className="text-gray-800 my-4 text-lg font-bold" onClick={closeMenu}>
 									Inquiry
 								</Link>
 							</div>

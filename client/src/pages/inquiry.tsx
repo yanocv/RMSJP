@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
 import axios from "axios";
-import { validateEmail, validateTelephone } from "../components/inquiry/helpers";
+import { validateEmail, validateJapanPostalCode, validateTelephone } from "../components/inquiry/helpers";
 import styles from "../styles/inquiry.module.scss";
 import {
 	initialFormValues,
@@ -13,19 +13,36 @@ import {
 } from "../components/inquiry/constants";
 import FormInput from "../components/inquiry/FormInput";
 
-const Inquiry: NextPage = () => {
-	const [formData, setFormData] = useState(initialFormValues);
-	const [errors, setErrors] = useState<{ [key: string]: string }>({});
+interface FormData {
+	[key: string]: string | string[];
+}
 
-	const validateField = (name: string, value: string): string | null => {
+const Inquiry: NextPage = () => {
+	const [formData, setFormData] = useState<FormData>(initialFormValues);
+	const [errors, setErrors] = useState<{ [key: string]: string }>({});
+	const [isModalOpen, setIsModalOpen] = useState(false);
+
+	const validateField = (name: string, value: string | string[]): string | null => {
+		const valueStr = Array.isArray(value) ? value.join(", ") : value;
 		switch (name) {
 			case "email":
-				return validateEmail(value);
+				return validateEmail(valueStr);
 			case "phone":
-				return validateTelephone(value);
+				return validateTelephone(valueStr);
+			case "fromPostalCode":
+			case "toPostalCode":
+				return validateJapanPostalCode(valueStr);
 			default:
-				return value === "" ? "This field is required" : "";
+				return value === "" ? "This field is required" : null;
 		}
+	};
+
+	const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+		const { name, value } = e.target;
+		setErrors({
+			...errors,
+			[name]: validateField(name, value) || ""
+		});
 	};
 
 	const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): Promise<void> => {
@@ -37,10 +54,10 @@ const Inquiry: NextPage = () => {
 		const inquiryFormFields = [...inquiryFormFieldsContact, ...inquiryFormFieldsFrom, ...inquiryFormFieldsTo];
 
 		inquiryFormFields.forEach(field => {
-			const { name, required } = field;
+			const { name } = field;
 			const value = formData[name];
 			const error = validateField(name, value);
-			if (error || (required && !value)) {
+			if (error || !value) {
 				newErrors[name] = error || REQUIRED;
 				hasErrors = true;
 			}
@@ -60,23 +77,39 @@ const Inquiry: NextPage = () => {
 						}
 					}
 				);
+
+				setIsModalOpen(true);
+				setFormData(initialFormValues);
+				setErrors({});
 			} catch (error) {
-				console.error("Error sending email:", error);
+				// TODO: Handle error
 			}
 		}
 	};
 
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
-		const { name, value } = e.target;
+	const handleInputChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+	): void => {
+		const { name, value } = e.target as { name: string; value: string };
 		setFormData({
 			...formData,
-			[name]: value
+			[name]: value || ""
 		});
 		if (errors[name]) {
 			const newErrors = { ...errors };
-			newErrors[name] = validateField(name, value);
+			const error = validateField(name, value || "") || "";
+			newErrors[name] = error;
 			setErrors(newErrors);
 		}
+	};
+
+	const closeModal = (): void => {
+		setIsModalOpen(false);
+		setFormData(initialFormValues);
+		setErrors({});
+
+		// navigate to home page
+		window.location.href = "/inquiry";
 	};
 
 	return (
@@ -86,8 +119,6 @@ const Inquiry: NextPage = () => {
 				<meta name="description" content="Submit your moving inquiry" />
 				<link rel="icon" href="/favicon.ico" />
 				<link rel="canonical" href="https://www.rogermovingservice.com/inquiry" />
-
-				{/* Open Graph Tags for Facebook and Instagram */}
 				<meta property="og:title" content="Inquiry - Roger's Moving Service JP" />
 				<meta
 					property="og:description"
@@ -107,13 +138,28 @@ const Inquiry: NextPage = () => {
 						method="POST"
 						className="max-w-3xl mx-auto bg-gray-100 p-8 rounded-md shadow-md"
 					>
-						<FormInput inputs={inquiryFormFieldsContact} error={errors} onChange={handleInputChange} />
+						<FormInput
+							inputs={inquiryFormFieldsContact}
+							error={errors}
+							onChange={handleInputChange}
+							handleBlur={handleBlur}
+						/>
 
 						<h2 className="text-lg font-medium text-red-700 mt-8 mb-6">Moving From</h2>
-						<FormInput inputs={inquiryFormFieldsFrom} error={errors} onChange={handleInputChange} />
+						<FormInput
+							inputs={inquiryFormFieldsFrom}
+							error={errors}
+							onChange={handleInputChange}
+							handleBlur={handleBlur}
+						/>
 
 						<h2 className="text-lg font-medium text-red-700 mt-8 mb-4">Moving To</h2>
-						<FormInput inputs={inquiryFormFieldsTo} error={errors} onChange={handleInputChange} />
+						<FormInput
+							inputs={inquiryFormFieldsTo}
+							error={errors}
+							onChange={handleInputChange}
+							handleBlur={handleBlur}
+						/>
 
 						<div className="text-center">
 							<button
@@ -127,6 +173,22 @@ const Inquiry: NextPage = () => {
 					</form>
 				</div>
 			</section>
+			{isModalOpen && (
+				<div className={`${styles.modalOverlay} ${styles.fadeIn}`} onClick={closeModal}>
+					<div className={`${styles.modalContent} flex flex-col items-center`} onClick={e => e.stopPropagation()}>
+						<h2 className="text-3xl font-bold text-center mb-4">Form Submitted Successfully!</h2>
+						<p className="text-lg text-gray-800 text-center">
+							Thank you for your inquiry. We will get back to you shortly.
+						</p>
+						<button
+							className="mt-6 px-4 py-2 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700"
+							onClick={closeModal}
+						>
+							Close
+						</button>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 };
