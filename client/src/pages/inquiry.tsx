@@ -6,12 +6,13 @@ import { validateEmail, validateJapanPostalCode, validateTelephone } from "../co
 import styles from "../styles/inquiry.module.scss";
 import {
 	initialFormValues,
-	REQUIRED,
 	inquiryFormFieldsContact,
 	inquiryFormFieldsTo,
 	inquiryFormFieldsFrom
-} from "../components/inquiry/constants";
+} from "../components/inquiry/constants/form-fields";
 import FormInput from "../components/inquiry/FormInput";
+import { REQUIRED } from "../components/inquiry/constants/messages";
+import { PREFECTURE_CITIES } from "../components/inquiry/constants/cities";
 
 interface FormData {
 	[key: string]: string | string[];
@@ -21,6 +22,8 @@ const Inquiry: NextPage = () => {
 	const [formData, setFormData] = useState<FormData>(initialFormValues);
 	const [errors, setErrors] = useState<{ [key: string]: string }>({});
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [fromCities, setFromCities] = useState<string[]>([]);
+	const [toCities, setToCities] = useState<string[]>([]);
 
 	const validateField = (name: string, value: string | string[]): string | null => {
 		const valueStr = Array.isArray(value) ? value.join(", ") : value;
@@ -56,6 +59,11 @@ const Inquiry: NextPage = () => {
 		inquiryFormFields.forEach(field => {
 			const { name } = field;
 			const value = formData[name];
+
+			if ((name === "optionalMovingDate" || name === "message") && !value) {
+				return;
+			}
+
 			const error = validateField(name, value);
 			if (error || !value) {
 				newErrors[name] = error || REQUIRED;
@@ -91,10 +99,30 @@ const Inquiry: NextPage = () => {
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
 	): void => {
 		const { name, value } = e.target as { name: string; value: string };
-		setFormData({
-			...formData,
-			[name]: value || ""
-		});
+
+		// Reset city field if prefecture is changed
+		if (name === "fromPrefecture" || name === "toPrefecture") {
+			const cityField = name === "fromPrefecture" ? "fromCityWard" : "toCityWard";
+			setFormData({
+				...formData,
+				[name]: value,
+				[cityField]: ""
+			});
+
+			// Update available cities based on the selected prefecture
+			if (name === "fromPrefecture") {
+				setFromCities(PREFECTURE_CITIES[value] || []);
+			} else {
+				setToCities(PREFECTURE_CITIES[value] || []);
+			}
+		} else {
+			setFormData({
+				...formData,
+				[name]: value || ""
+			});
+		}
+
+		// Clear errors for the changed field
 		if (errors[name]) {
 			const newErrors = { ...errors };
 			const error = validateField(name, value || "") || "";
@@ -147,18 +175,30 @@ const Inquiry: NextPage = () => {
 
 						<h2 className="text-lg font-medium text-red-700 mt-8 mb-6">Moving From</h2>
 						<FormInput
-							inputs={inquiryFormFieldsFrom}
+							inputs={inquiryFormFieldsFrom.map(field => {
+								if (field.name === "fromCityWard") {
+									return { ...field, values: fromCities };
+								}
+								return field;
+							})}
 							error={errors}
 							onChange={handleInputChange}
 							handleBlur={handleBlur}
+							fromCities={formData.fromCityWard}
 						/>
 
 						<h2 className="text-lg font-medium text-red-700 mt-8 mb-4">Moving To</h2>
 						<FormInput
-							inputs={inquiryFormFieldsTo}
+							inputs={inquiryFormFieldsTo.map(field => {
+								if (field.name === "toCityWard") {
+									return { ...field, values: toCities };
+								}
+								return field;
+							})}
 							error={errors}
 							onChange={handleInputChange}
 							handleBlur={handleBlur}
+							toCities={formData.toCityWard}
 						/>
 
 						<div className="text-center">

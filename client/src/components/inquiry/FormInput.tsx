@@ -1,5 +1,3 @@
-import React from "react";
-
 interface FormInputProps {
 	onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
 	inputs: {
@@ -12,9 +10,18 @@ interface FormInputProps {
 	}[];
 	handleBlur?: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 	error?: { [key: string]: string };
+	toCities?: string[] | undefined | string;
+	fromCities?: string[] | undefined | string;
 }
 
-const FormInput = ({ onChange, handleBlur, inputs, error = {} }: FormInputProps): React.JSX.Element => {
+const FormInput = ({
+	onChange,
+	handleBlur,
+	inputs,
+	error = {},
+	fromCities,
+	toCities
+}: FormInputProps): React.JSX.Element => {
 	return (
 		<div className="mb-6">
 			{inputs.map(input => (
@@ -31,12 +38,20 @@ const FormInput = ({ onChange, handleBlur, inputs, error = {} }: FormInputProps)
 							onChange={onChange}
 							className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 						>
-							<option value="">Select an option</option>
-							{input.values?.map((value, index) => (
-								<option key={index} value={value}>
-									{value}
-								</option>
-							))}
+							<option value="">{fromCities || "Select an aaaoption"}</option>
+							{input.name === "fromCityWard"
+								? fromCities !== undefined
+									? input.values?.map((value, index) => (
+											<option key={index} value={value}>
+												{value}
+											</option>
+										))
+									: null
+								: input.values?.map((value, index) => (
+										<option key={index} value={value}>
+											{value}
+										</option>
+									))}
 						</select>
 					) : input.type === "textarea" ? (
 						<textarea

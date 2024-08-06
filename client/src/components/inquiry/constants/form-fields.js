@@ -1,7 +1,8 @@
+import { PREFECTURE_CITIES } from "./cities";
+
 const ELEVATOR_OPTIONS = ["Yes", "Stairs only", "Elevator does Not stop on our floor"];
 const PACKING_SERVICE_OPTIONS = ["Yes", "No"];
 const APARTMENT_SIZE_OPTIONS = ["1R", "1K", "1DK", "1LDK", "2LDK", "3LDK", "4LDK", "Other"];
-const PREFECTURE = ["Tokyo", "Kanagawa", "Saitama", "Chiba"];
 
 export const inquiryFormFieldsContact = [
 	{
@@ -52,12 +53,13 @@ export const inquiryFormFieldsTo = [
 		name: "toPrefecture",
 		type: "select",
 		label: "Prefecture",
-		values: PREFECTURE
+		values: Object.keys(PREFECTURE_CITIES)
 	},
 	{
 		name: "toCityWard",
-		type: "text",
-		label: "City/Ward"
+		type: "select",
+		label: "City/Ward",
+		values: Object.values(PREFECTURE_CITIES).flat()
 	},
 	{
 		name: "toAddress",
@@ -93,7 +95,6 @@ export const inquiryFormFieldsFrom = [
 		name: "fromApartmentSize",
 		type: "select",
 		label: "Apartment size",
-
 		values: APARTMENT_SIZE_OPTIONS
 	},
 	{
@@ -105,13 +106,13 @@ export const inquiryFormFieldsFrom = [
 		name: "fromPrefecture",
 		type: "select",
 		label: "Prefecture",
-
-		values: PREFECTURE
+		values: Object.keys(PREFECTURE_CITIES)
 	},
 	{
 		name: "fromCityWard",
-		type: "text",
-		label: "City/Ward"
+		type: "select",
+		label: "City/Ward",
+		values: Object.values(PREFECTURE_CITIES).flat()
 	},
 	{
 		name: "fromAddress",
@@ -155,9 +156,3 @@ export const initialFormValues = {
 	packingService: "",
 	message: ""
 };
-
-export const REQUIRED = "This field is required";
-export const INVALID_EMAIL = "Invalid email address";
-export const INVALID_TELEPHONE_CHARACTERS = "Telephone number must contain only numbers";
-export const INVALID_TELEPHONE_NUMBER = "Telephone number must be 10 or 11 digits";
-export const INVALID_JAPAN_POSTAL_CODE = "Invalid Japan postal/zip code";

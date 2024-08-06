@@ -4,7 +4,7 @@ import {
 	INVALID_TELEPHONE_CHARACTERS,
 	INVALID_TELEPHONE_NUMBER,
 	REQUIRED
-} from "./constants";
+} from "./constants/messages";
 
 export const validateEmail = (fieldValue: string): string | null => {
 	const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
